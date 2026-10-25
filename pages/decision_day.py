@@ -20,7 +20,9 @@ st.dataframe(d0.groupby('action')[TENORS].mean().round(1))
 ## Does a bigger move get a bigger reaction? (25 vs 50+ bps)
 d0['size'] = d0['chg_bps'].abs().astype(int).astype(str) + ' bps'
 st.subheader("By size of move")
-st.dataframe(d0.groupby(['action', 'size'])[TENORS].mean().round(1))
+by_size = d0.groupby(['action', 'size'])[TENORS].mean().round(1)
+by_size['count'] = d0.groupby(['action', 'size']).size()
+st.dataframe(by_size)
 
 ## What happens in the days after?
 path = event_path(yields_df, moves, tenor, before=1, after=after)
@@ -31,5 +33,5 @@ st.line_chart(avg)
 with st.expander("Every move"):
     st.dataframe(d0.round(1))
 
-st.caption("Note: the Mar 13, 2020 emergency cut was announced after markets closed on a Friday, "
-           "so the real reaction happened the next Monday, not on the date shown here.")
+st.caption("Note: the Mar 13, 2020 emergency cut was announced after markets closed, "
+           "so it shows here as Mar 16, the first day the market could react.")
