@@ -1,5 +1,4 @@
 import json, urllib.request
-from pathlib import Path
 import pandas as pd
 import streamlit as st
 
@@ -30,4 +29,6 @@ def load_moves():
     policy['chg_bps'] = policy['rate'].diff() * 100
     moves = policy[policy['chg_bps'] != 0].dropna().copy()
     moves['action'] = moves['chg_bps'].apply(lambda x: 'Raise' if x > 0 else 'Cut')
+    moves.index = pd.DatetimeIndex(
+        [d - pd.Timedelta(days=1) if d.dayofweek == 3 else d for d in moves.index], name='date')
     return moves

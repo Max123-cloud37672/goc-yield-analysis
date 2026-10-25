@@ -30,3 +30,6 @@ st.line_chart(avg)
 
 with st.expander("Every move"):
     st.dataframe(d0.round(1))
+
+st.caption("Note: the Mar 13, 2020 emergency cut was announced after markets closed on a Friday, "
+           "so the real reaction happened the next Monday, not on the date shown here.")
