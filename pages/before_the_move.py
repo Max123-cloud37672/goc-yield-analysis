@@ -32,5 +32,5 @@ with st.expander("Every move"):
     st.dataframe(pre.round(1))
 
 
-st.caption("Note: March 2020 had three emergency COVID cuts (Mar 4, 13 and 27) only weeks apart, "
+st.caption("Note: March 2020 had three emergency COVID cuts (Mar 4, 16 and 27) only weeks apart, "
            "so their 20-day windows overlap and each one's 'before' period includes the previous cut.")

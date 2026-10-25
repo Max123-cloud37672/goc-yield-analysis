@@ -18,7 +18,7 @@ st.subheader("Avg yield change on decision day (bps)")
 st.dataframe(d0.groupby('action')[TENORS].mean().round(1))
 
 ## Does a bigger move get a bigger reaction? (25 vs 50+ bps)
-d0['size'] = d0['chg_bps'].abs().astype(int).astype(str) + ' bps'
+d0['size'] = d0['chg_bps'].abs().astype(int)
 st.subheader("By size of move")
 by_size = d0.groupby(['action', 'size'])[TENORS].mean().round(1)
 by_size['count'] = d0.groupby(['action', 'size']).size()
