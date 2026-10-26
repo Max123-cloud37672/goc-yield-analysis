@@ -1,12 +1,12 @@
 # GoC Yields around Bank of Canada Rate Decisions
 
-This is a streamlit app that tests whether the Government of Canada benchmark bonds react to Bank of Canada rate changes in the coming weeks before the initial announcment, not on the day of. Having followed equities and crypto, I'd often watch a rate decision barely move prices because the market had already priced in the change weeks before the announcement, and I wanted to see from a statistical perspective how true that was in bonds.
+This is a streamlit app that tests whether the Government of Canada benchmark bonds react to Bank of Canada rate changes in the coming weeks before the initial announcement, not on the day of. Having followed equities and crypto, I'd often watch a rate decision barely move prices because the market had already priced in the change weeks before the announcement, and I wanted to see from a statistical perspective how true that was in bonds.
 
 ## Questions
 
-1. **Before the move:** Does the bond market see BoC moves coming? I expected to see that yields would move 20 days or less before a cut, hold, or hike. If they did it means that the market did see it coming and most priced it accurately. 
+1. **Before the move:** Does the bond market see BoC moves coming? I expected to see that yields would move 20 days or less before a cut or hike. If they did it means that the market did see it coming and most priced it accurately. 
 2. **Decision day:** How do yields react on decision day? A small jump means it was already priced in. A big jump means it was a suprise. 
-3. **Rate cycles:** What do yields do across a whole cycle? Yields are constantly changing, drifiting down in a cutting cycle and up during a hiking cycle, with the 2Y tener moving the most, and the 30y moving the least.
+3. **Rate cycles:** What do yields do across a whole cycle? Yields are constantly changing, drifting down in a cutting cycle and up during a hiking cycle.
 
 ## Data
 
@@ -18,16 +18,16 @@ This is a streamlit app that tests whether the Government of Canada benchmark bo
 
 ## How I got here
 
-1. **Starting point:** I started with two Python scripts. The first, 'boc_decisions.py', downladed the Bank of Canada's interest rate history and picked out every day the bank changed its rate. The second, 'reading_yields.py', uploaded the bond yields and compared them to those rate changes. My hypothesis was that the bond market sees rate moves coming, therefore, in the coming weeks before a cut or hike, there should not be a large change in interest rates on the day of. After that, I then printed tables in the terminal. 
-2. **Splitting into three questions:** One question I knew was not gonna be sufficient to test the idea properly, so I broke it into three. First, do yields move in the weeks before a decision? That's the main test of whether the market sees it coming. Second, how much do yields move on the day itself? If the market alreay saw it coming, the reaction should be small, so this checks the first answer from another angle. Third, what do yields do over a whole cutting, holding, or hiking cycle? That shows the much bigger picture of what is going on yearly beyond the individual decisions happening many times a year. 
+1. **Starting point:** I started with two Python scripts. The first, 'boc_decisions.py', downloaded the Bank of Canada's interest rate history and picked out every day the bank changed its rate. The second, 'reading_yields.py', uploaded the bond yields and compared them to those rate changes. My hypothesis was that the bond market sees rate moves coming, therefore, in the coming weeks before a cut or hike, there should not be a large change in yields on the day of. After that, I then printed tables in the terminal. 
+2. **Splitting into three questions:** One question I knew was not gonna be sufficient to test the idea properly, so I broke it into three. First, do yields move in the weeks before a decision? That's the main test of whether the market sees it coming. Second, how much do yields move on the day itself? If the market already saw it coming, the reaction should be small, so this checks the first answer from another angle. Third, what do yields do over a whole cutting, holding, or hiking cycle? That shows the much bigger picture of what is going on yearly beyond the individual decisions happening many times a year. 
 
-3. **First problem:** When I made the chart of the 2Y yield coloured by cutting, hiking and hold, everything from 2001-2009 showed up as Hold. That was wrong, because the BoC cut and raised rates many times in those years. Looking into it, I found the rate data I was downloading only starts in April 2009, so the app had no rate decisions before then and labelled everyday as a Hold. I fixed it by starting all the data in April 2009, so every day has both a yield and the right label. 
-4. **Second problem:** The recent decisions were all dated on Thursdays, but from what I learned the Bank of Canada usually announces on Wednesday. When I printed the weekdays, every move from 2022 on was a day late, so my "decision day" numbers were really measuring the day after. I shifted those dates back a day, and the big surpise move, like October 2022, finally ended up working out. 
+3. **First problem:** When I made the chart of the 2Y yield coloured by cutting, hiking and hold, everything from 2001-2009 showed up as Hold. That was wrong, because the BoC cut and raised rates many times in those years. Looking into it, I found the rate data I was downloading only starts in April 2009, so the app had no rate decisions before then and labelled every day as a Hold. I fixed it by starting all the data in April 2009, so every day has both a yield and the right label. 
+4. **Second problem:** The recent decisions were all dated on Thursdays, but from what I learned the Bank of Canada usually announces on Wednesday. When I printed the weekdays, every move from 2022 on was a day late, so my "decision day" numbers were really measuring the day after. I shifted those dates back a day, and the big suprise moves, like October 2022, finally showed up on the actual decision day instead of the day after.
 5. **Checking the proof:** The averages show that yields fall before cuts, but not why. They might fall because traders see the cut coming, or economic news that came out pushes yields down, or for various other reasons. 
 6. **Keeping it simple:** I learned about spreads, but they pulled me away from the main question, so I decided to leave those more advanced tests on the backburner, as this was a project for me to really understand the basics. This project was really about answering the three questions clearly, and then moving from here. 
 ## Why Streamlit
 
-My first scripts just printed tables, and every time I wanted to try a different setting, like looking 10 days back instead of 20, I had to change the code and run it again. With Streamlit it was much simpler, I could put those settings on sliders and see the results change right away. It also let me give each question its own page, so it shows the evolution of my thought process i.e., how did I from Q1->Q2. 
+My first scripts just printed tables, and every time I wanted to try a different setting, like looking 10 days back instead of 20, I had to change the code and run it again. With Streamlit it was much simpler, I could put those settings on sliders and see the results change right away. It also let me give each question its own page, so it shows the evolution of my thought process i.e., how I got from Q1->Q2. 
 
 ## Code structure
 
@@ -39,7 +39,7 @@ pages/
   rate_cycle.py         Q3: what do they do over a whole cycle?
 src/
   data.py               loads the yields file and the Bank of Canada rate decisions. 
-  analysis.py           the calcuations for each question.
+  analysis.py           the calculations for each question.
 data/
   bond_yields_all.csv   daily Government of Canada bond yields. 
 ```
@@ -67,7 +67,7 @@ streamlit run app.py
 
 **2. Decision day:** Not much happens on the day itself. The 2Y moved -4.9 bps on cuts and +2.2 bps on hikes, which suggests most moves were already priced in. The big reactions were suprises, like the unexpected cut in January 2015 (-29bps) and October 2022, when the Bank hiked less than expected and the 2Y fell 28 bps. 
 
-**3. Rate cycles:** Yields follow the cycle, and the 2Y moves most. During cutting phases it fails about 5.8 bp a month, and during a hiking phases it rises about 6.2 bps a month. 
+**3. Rate cycles:** Yields follow the cycle, and the 2Y moves most. During cutting phases it falls about 5.8 bp a month, and during hiking phases it rises about 6.2 bps a month. 
 
 ## Limits
 
@@ -77,7 +77,6 @@ streamlit run app.py
 
 ## What I'd do next
 
-- Compare the moes before decisions to normal weeks in the same cycle, to test whether they're actually unsual. 
+- Compare the moves before decisions to normal weeks in the same cycle, to test whether they're actually unusual. 
 - Add the 2001 to 2009 decisions by hand so the data goes further back.
-- Add a button to leaven out the March 2020 cuts. 
-ss
+- Add a button to leave out the March 2020 cuts. 
